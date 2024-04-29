@@ -8,8 +8,7 @@ app = FastAPI(title="Upload Files by FastAPI")
 async def upload_files(files: List[UploadFile] = File(...)):
     file_list = []
     for single_file in files:
-        with open(single_file.filename, "wb") as buffer:
-            shutil.copy(single_file.filename, 'uploaded_files/')
-            os.remove(single_file.filename)
+        with open(f'uploaded_files/{single_file.filename}', "wb+") as file_object:
+            shutil.copyfileobj(single_file.file, file_object)    
         file_list.append(single_file.filename)
     return "The following files has been uploaded:" + str(file_list)
